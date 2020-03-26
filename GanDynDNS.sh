@@ -7,13 +7,13 @@
 #	https://api.gandi.net/docs/livedns/
 
 #clé API, à générer dans le tableau de bord (https://admin.gandi.net/?locale=fr):
-apikey=si0TiSw2ezVbN7HYD6mv7Eci
+apikey=XXX
 
 #nom du domaine enregistré (alias rrset_name)
-domaine="madkrok.com"
+domaine="domaine.com"
 
 #nom du sous-domaine (aka fqdn)
-sousdomaine="109"
+sousdomaine="sous-domaine"
 
 adresserecords=$(echo https://api.gandi.net/v5/livedns/domains/${domaine}/records/${sousdomaine})
 
