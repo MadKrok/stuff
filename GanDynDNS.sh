@@ -1,5 +1,6 @@
 #!/bin/bash
-#DNS dynamique avec Gandi.net, valide au 23/03/2020 (vive le confinement)
+#DNS dynamique avec Gandi.net, valide au 23/03/2020 (vive le confinement).
+#Mis à jour le 29/10/2020, pour prendre en compte des sous-domaines multiples, gérés sur le même serveur.
 #Utilise jq (https://stedolan.github.io/jq/) pour manipuler les JSON et le site ifconfig.me pour récupérer l'adresse publique de la box Internet.
 #
 #Docs de l'API LiveDNS:
@@ -12,9 +13,11 @@ apikey=XXX
 #nom du domaine enregistré (alias rrset_name)
 domaine="domaine.com"
 
-#nom du sous-domaine (aka fqdn)
-sousdomaine="sous-domaine"
-
+#nom des sous-domaines (aka fqdn)
+sousdomaines="sousdomaine1 sousdomaine2 etc"
+#comme en Python, possibilité de faire une boucle for sur des éléments autre que des chiffres (ici des strings)! Exercice réussi. :)
+for sousdomaine in $sousdomaines
+do
 adresserecords=$(echo https://api.gandi.net/v5/livedns/domains/${domaine}/records/${sousdomaine})
 
 oldiparray=$(curl -s -H "Content-Type: application/json" -H "Authorization: Apikey ${apikey}" $adresserecords | jq '.[0].rrset_values')
@@ -44,3 +47,4 @@ then
 else
 	echo "Je n'ai rien fait, les IP sont toujours les bonnes."
 fi
+done
