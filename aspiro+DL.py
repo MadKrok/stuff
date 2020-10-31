@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
+
+#usage :
+# $ python aspiro+DL.py https://adresse.page/FreeBoxOS/ /chemin/de/fichier/local/optionnel/
+# si aucun dossier local n'est indiqué (second argument), les fichiers se téléchargent dans
+# le dossier courant.
+
 from bs4 import BeautifulSoup
 import requests
 import sys
@@ -13,7 +19,6 @@ def recupLiens():
     soup = BeautifulSoup(pageFree.text, features="lxml")
 
 #création d'un fichier texte avec l'ensemble des liens de téléchargement contenus sur la page
-#(passer ce fichier comme argument de la commande wget avec l'option -i déclenchera les téléchargements)
     dlList = open(r"dlList.txt","a")
 
 #variable de comparaison pour éviter d'inclure deux fois le même lien
@@ -28,6 +33,7 @@ def recupLiens():
     dlList.close()
 
 
+#téléchargement des fichiers:
 def download():
     try:
         destination = sys.argv[2]
@@ -35,6 +41,7 @@ def download():
         destination = None
     if destination == None:
         subprocess.call(["wget", "-c", "-i", "dlList.txt"])
+#rajoute l'option "-P" pour indiquer un chemin de dossier personnalisé pour les téléchargement:
     else:
         subprocess.call(["wget", "-c", "-i", "dlList.txt", "-P", destination])
     subprocess.call(["rm", "dlList.txt"])
